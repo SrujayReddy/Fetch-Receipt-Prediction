@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetch Receipt Predictions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fetch Receipt Predictions 2022</h1>
+        <div class="chart-container">
+            <canvas id="comparisonChart"></canvas>
+        </div>
+        <div class="predictions">
+            <h2>Monthly Predictions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Predicted Receipts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for month, count in zip(months_2022, counts_2022) %}
+                    <tr>
+                        <td>{{ month }}</td>
+                        <td>{{ "%.0f"|format(count) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ months_2021|safe }},
+                datasets: [{
+                    label: '2021 Actual',
+                    data: {{ counts_2021|safe }},
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                },
+                {
+                    label: '2022 Predicted',
+                    data: {{ counts_2022|safe }},
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Receipts'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

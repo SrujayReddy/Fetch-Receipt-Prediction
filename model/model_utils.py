@@ -3,22 +3,22 @@ import pandas as pd
 import numpy as np
 
 class ReceiptPredictor:
-    def __init__(self, load_pretrained=False, model_path=None, train_mean_path=None, 
+    def __init__(self, load_pretrained=False, model_path=None, train_mean_path=None,
                  train_std_path=None, y_mean_path=None, y_std_path=None):
         self.train_mean = None
         self.train_std = None
         self.y_mean = None
         self.y_std = None
-        
+
         if load_pretrained and model_path:
             # Load pre-trained model
             self.model = tf.keras.models.load_model(model_path, compile=False)
-            
+
             # Load normalization parameters if provided
             if train_mean_path and train_std_path:
                 self.train_mean = np.load(train_mean_path)
                 self.train_std = np.load(train_std_path)
-            
+
             if y_mean_path and y_std_path:
                 self.y_mean = np.load(y_mean_path)
                 self.y_std = np.load(y_std_path)
@@ -121,14 +121,14 @@ class ReceiptPredictor:
 
         # Initialize with last 7 real values
         try:
-            train_data = pd.read_csv('../data/daily_receipts.csv')
+            train_data = pd.read_csv('/app/data/daily_receipts.csv')
             if not train_data.empty and 'Receipt_Count' in train_data.columns:
                 history = train_data['Receipt_Count'].tail(7).tolist()
             else:
                 print("Warning: Training data is empty or missing Receipt_Count column")
         except Exception as e:
             print(f"Warning: Could not load training data: {str(e)}")
-            
+
         # If we couldn't get any history data, return empty predictions
         if not history:
             print("Warning: No historical data available for prediction")
@@ -161,14 +161,14 @@ class ReceiptPredictor:
             # Normalize and predict
             if self.train_mean is None or self.train_std is None:
                 raise ValueError("Training normalization parameters (train_mean, train_std) are not set")
-                
+
             features_norm = (features - self.train_mean) / self.train_std
             pred_norm = self.model.predict(features_norm.reshape(1, -1))[0][0]
-            
+
             # Denormalize prediction
             if self.y_mean is None or self.y_std is None:
                 raise ValueError("Target normalization parameters (y_mean, y_std) are not set")
-                
+
             # Ensure we're not operating on None values
             pred = pred_norm * self.y_std + self.y_mean if self.y_std is not None and self.y_mean is not None else 0
 

@@ -9,7 +9,7 @@ An end-to-end machine learning solution for predicting monthly scanned receipts 
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/fetch-receipt-prediction.git
+git clone https://github.com/SrujayReddy/Fetch-Receipt-Prediction.git
 cd fetch-receipt-prediction
 
 # 2. Build and run container

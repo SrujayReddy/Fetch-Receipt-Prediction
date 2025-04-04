@@ -9,8 +9,8 @@ An end-to-end machine learning solution for predicting monthly scanned receipts 
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/SrujayReddy/fetch-receipt-prediction.git
-cd fetch-receipt-prediction
+git clone https://github.com/SrujayReddy/Fetch-Receipt-Prediction.git
+cd Fetch-Receipt-Prediction
 
 # 2. Build and run container
 docker build -t fetch-app . && docker run -p 5001:5001 fetch-app

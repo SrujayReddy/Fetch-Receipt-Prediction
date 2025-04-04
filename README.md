@@ -9,7 +9,7 @@ An end-to-end machine learning solution for predicting monthly scanned receipts 
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/fetch-receipt-prediction.git
+git clone https://github.com/SrujayReddy/fetch-receipt-prediction.git
 cd fetch-receipt-prediction
 
 # 2. Build and run container
@@ -158,4 +158,5 @@ A: Model detected post-holiday pattern from 2021 training data
 ---
 
 *Developed with ❤️ for Fetch Rewards Machine Learning Engineer Position*
-``
+`
+

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Fetch Receipt Predictions</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Receipt Predictions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1.1">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Fetch Receipt Predictions 2022</h1>
+        <h1>Receipt Predictions 2022</h1>
         <div class="chart-container">
-            <canvas id="comparisonChart"></canvas>
+            <canvas id="predictionChart"></canvas>
         </div>
-        <div class="predictions">
+        <div class="data-table">
             <h2>Monthly Predictions</h2>
             <table>
                 <thead>
@@ -21,10 +21,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for month, count in zip(months_2022, counts_2022) %}
+                    {% for month, count in zip(pred_labels, pred_data) %}
                     <tr>
                         <td>{{ month }}</td>
-                        <td>{{ "%.0f"|format(count) }}</td>
+                        <td>{{ "{:,.0f}".format(count) }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -33,21 +33,21 @@
     </div>
 
     <script>
-        const ctx = document.getElementById('comparisonChart').getContext('2d');
+        const ctx = document.getElementById('predictionChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {{ months_2021|safe }},
+                labels: {{ hist_labels|safe }},
                 datasets: [{
                     label: '2021 Actual',
-                    data: {{ counts_2021|safe }},
-                    borderColor: 'rgb(75, 192, 192)',
+                    data: {{ hist_data|safe }},
+                    borderColor: 'rgba(75, 192, 192, 1)',
                     tension: 0.1
                 },
                 {
                     label: '2022 Predicted',
-                    data: {{ counts_2022|safe }},
-                    borderColor: 'rgb(255, 99, 132)',
+                    data: {{ pred_data|safe }},
+                    borderColor: 'rgba(255, 99, 132, 1)',
                     tension: 0.1
                 }]
             },
@@ -55,9 +55,10 @@
                 responsive: true,
                 scales: {
                     y: {
+                        beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Number of Receipts'
+                            text: 'Receipt Count'
                         }
                     }
                 }

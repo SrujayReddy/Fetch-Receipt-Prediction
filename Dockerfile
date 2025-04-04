@@ -7,4 +7,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "app/app.py"]
+# Fix paths and remove redundant RUN
+RUN mkdir -p /app/data /app/model && \
+    python /app/model/train.py && \
+    python /app/model/predict.py
+
+CMD ["python", "/app/app/app.py"]
